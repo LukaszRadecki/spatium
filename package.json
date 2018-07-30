@@ -1,0 +1,14 @@
+{
+  "name": "spatium",
+  "description": "Simple library for searching locations in radius",
+  "version": "1.0.0",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "browser-sync": "^2.18.12",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1"
+  },
+  "author": "Lukas Radecki",
+  "license": "MIT"
+}
