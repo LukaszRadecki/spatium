@@ -1,5 +1,5 @@
 # Spatium
 
-![Spatium](https://github.com/LukaszRadecki/spatium/blob/master/app/demo/img/spatium_logo.png)
+![Spatium](https://github.com/LukaszRadecki/spatium/blob/master/spatium_logo.jpg)
 
 Documentation in progress...
