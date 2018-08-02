@@ -1,7 +1,6 @@
 /*!
- * jQuery UI Widget-factory plugin boilerplate (for 1.8/9+)
- * Author: @addyosmani
- * Further changes: @peolanha
+ * jQuery UI Widget-factory plugin
+ * Author: Lukasz Radecki
  * Licensed under the MIT license
  */
 
