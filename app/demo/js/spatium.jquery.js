@@ -15,15 +15,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     //Options to be used as defaults
     options: {
-      initLocation: "London", // String with name or coordinates
+      initLocation: "", // String with name or coordinates
       initZoom: 10, // Number only
-      initLocationInfoWindow: "<h1>Start<h1>",
+      initLocationInfoWindow: false,
       mapOptions: {}, // Settings object
       inputLocation: "", // String with name or coordinates
       locationsSet: {}, // Object with Lat, Lng or path to json (string or array with objects)
       radius: "", // only number
       distanceUnit: "km", //km or mi
-      locationsMarkup: "", // path to icon file
+      locationsMarker: "", // path to icon file
+      markersAnimation: false,
       infoWindowTemplate: [{
         tag: "h2",
         content: "company",
@@ -43,14 +44,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         content: "distance",
         class: ""
       }], // tpl object
-      mainLocationMarkup: "",
+      mainLocationMarker: true,
       mainLocationDraggable: true, // path to icon file or false
-      mainLocationInfoWindow: "" // string or false
+      mainLocationInfoWindow: false // string or false
     },
 
-    matchedLocations: {},
+    matchedLocations: [],
+
+    mapObject: {},
+
+    markersArr: [],
 
     _create: function _create() {
+
+      this._mapCreate();
 
       if (this.options.locationsSet && this.options.inputLocation) {
         this._searchLocations();
@@ -64,6 +71,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     destroy: function destroy() {
 
       $.Widget.prototype.destroy.call(this);
+    },
+
+    _mapCreate: function _mapCreate() {
+      var map = new google.maps.Map(this.element[0], this.options.mapOptions);
+      return this.mapObject = map;
     },
 
     _loadJSON: function _loadJSON(jsonPath) {
@@ -178,38 +190,47 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       var _ = this;
       var bounds = new google.maps.LatLngBounds();
-      var map = new google.maps.Map(_.element[0], _.options.mapOptions);
+      var infowindow = new google.maps.InfoWindow();
+
       var openedWindow = void 0;
 
-      var _loop = function _loop(i) {
+      for (var i = 0; i < _.markersArr.length; i++) {
+        _.markersArr[i].setMap(null);
+      }
+      _.markersArr = [];
 
-        var position = new google.maps.LatLng(markers[i].lat, markers[i].lng);
+      var _loop = function _loop(_i) {
+
+        var position = new google.maps.LatLng(markers[_i].lat, markers[_i].lng);
         bounds.extend(position);
         var marker = new google.maps.Marker({
           position: position,
-          map: map,
-          icon: _.options.locationsMarkup
+          map: _.mapObject,
+          icon: _.options.locationsMarker,
+          animation: _.options.markersAnimation ? google.maps.Animation.DROP : false
         });
 
-        var infowindow = new google.maps.InfoWindow();
+        _.markersArr.push(marker);
+
+        infowindow = new google.maps.InfoWindow();
 
         google.maps.event.addListener(marker, "click", function () {
           if (openedWindow) {
             openedWindow.close();
           }
           if (markers.length > 1) {
-            infowindow.setContent(_._templateEngine(markers[i]));
+            infowindow.setContent(_._templateEngine(markers[_i]));
           } else {
             infowindow.setContent(_.options.initLocationInfoWindow ? _.options.initLocationInfoWindow : _.options.initLocation);
           }
 
-          infowindow.open(map, this);
+          infowindow.open(_.mapObject, this);
           openedWindow = infowindow;
         });
 
         if (markers.length == 1) {
-          google.maps.event.addListener(map, 'zoom_changed', function () {
-            var zoomChangeBoundsListener = google.maps.event.addListener(map, 'bounds_changed', function (event) {
+          google.maps.event.addListener(_.mapObject, 'zoom_changed', function () {
+            var zoomChangeBoundsListener = google.maps.event.addListener(_.mapObject, 'bounds_changed', function (event) {
               if (this.getZoom() > _.options.initZoom && this.initialZoom == true) {
                 this.setZoom(_.options.initZoom);
                 this.initialZoom = false;
@@ -220,19 +241,31 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       };
 
-      for (var i = 0; i < markers.length; i++) {
-        _loop(i);
+      for (var _i = 0; _i < markers.length; _i++) {
+        _loop(_i);
       }
 
-      if (_.options.mainLocationMarkup) {
+      if (_.options.mainLocationMarker) {
         var marker = new google.maps.Marker({
           position: originLocation,
           title: 'Main Location',
           draggable: _.options.mainLocationDraggable,
-          map: map,
-          icon: _.options.mainLocationMarkup
+          map: _.mapObject,
+          icon: _.options.mainLocationMarker
         });
-        map.setCenter(marker.getPosition());
+
+        _.mapObject.setCenter(marker.getPosition());
+
+        google.maps.event.addListener(marker, "click", function () {
+          if (openedWindow) {
+            openedWindow.close();
+          }
+
+          infowindow.setContent(_.options.mainLocationInfoWindow ? _.options.mainLocationInfoWindow : _.options.initLocation);
+
+          infowindow.open(_.mapObject, this);
+          openedWindow = infowindow;
+        });
 
         google.maps.event.addListener(marker, "dragend", function (event) {
           _.options.inputLocation = {
@@ -242,13 +275,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
           _._searchLocations();
         });
+
+        _.markersArr.push(marker);
       }
 
       if (markers.length > 1) {
-        map.fitBounds(bounds);
+        _.mapObject.fitBounds(bounds);
       } else {
-        map.initialZoom = true;
-        map.fitBounds(bounds);
+        _.mapObject.initialZoom = true;
+        _.mapObject.fitBounds(bounds);
       }
     },
 

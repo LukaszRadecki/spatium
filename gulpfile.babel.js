@@ -2,14 +2,13 @@
 
 var gulp = require('gulp');
 var babel = require('gulp-babel');
-//var watch = require('gulp-watch');
 var browserSync = require('browser-sync');
 
 gulp.task('serve', ['scripts'], function() {
 
   browserSync.init({
       
-    proxy: "http://localhost:8002/demo/"
+    proxy: "http://localhost:8002/"
     
   });
 

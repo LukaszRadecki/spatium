@@ -1,7 +1,7 @@
 webapp:
   image: webdevops/php-nginx:ubuntu-16.04
   volumes:
-    - ./app/:/app/
+    - ./app/demo/:/app/
   working_dir: /app/
   environment:
     - APP_ENV=local

@@ -12,15 +12,16 @@
 
       //Options to be used as defaults
       options: {
-        initLocation: "London", // String with name or coordinates
+        initLocation: "", // String with name or coordinates
         initZoom: 10, // Number only
-        initLocationInfoWindow: "<h1>Start<h1>",
+        initLocationInfoWindow: false,
         mapOptions: {}, // Settings object
         inputLocation: "", // String with name or coordinates
         locationsSet: {}, // Object with Lat, Lng or path to json (string or array with objects)
         radius: "", // only number
         distanceUnit: "km", //km or mi
-        locationsMarkup: "", // path to icon file
+        locationsMarker: "", // path to icon file
+        markersAnimation: false,
         infoWindowTemplate: [
           {
             tag: "h2",
@@ -45,14 +46,20 @@
             class: ""
           },
         ], // tpl object
-        mainLocationMarkup: "",
+        mainLocationMarker: true,
         mainLocationDraggable: true, // path to icon file or false
-        mainLocationInfoWindow: "" // string or false
+        mainLocationInfoWindow: false // string or false
       },
 
-      matchedLocations: {},
+      matchedLocations: [],
+
+      mapObject: {},
+
+      markersArr: [],
 
       _create: function () {
+
+        this._mapCreate();
 
         if (this.options.locationsSet && this.options.inputLocation) {
           this._searchLocations();
@@ -67,6 +74,11 @@
 
           $.Widget.prototype.destroy.call(this);
 
+      },
+
+      _mapCreate: function(){
+        let map = new google.maps.Map(this.element[0], this.options.mapOptions);
+        return this.mapObject = map;
       },
 
       _loadJSON: function(jsonPath) {
@@ -192,8 +204,14 @@
           
           let _ = this;
           let bounds = new google.maps.LatLngBounds();
-          let map = new google.maps.Map(_.element[0], _.options.mapOptions);
+          let infowindow = new google.maps.InfoWindow();
+          
           let openedWindow;
+
+          for (var i = 0; i < _.markersArr.length; i++ ) {
+            _.markersArr[i].setMap(null);
+          }
+          _.markersArr = [];
           
           for (let i = 0; i < markers.length; i++) {
             
@@ -201,11 +219,14 @@
             bounds.extend(position);
             let marker = new google.maps.Marker({
                 position: position,
-                map: map,
-                icon: _.options.locationsMarkup
+                map: _.mapObject,
+                icon: _.options.locationsMarker,
+                animation: (_.options.markersAnimation ? google.maps.Animation.DROP : false)
             });
 
-            let infowindow = new google.maps.InfoWindow();
+            _.markersArr.push(marker);
+
+            infowindow = new google.maps.InfoWindow();
 
             google.maps.event.addListener(marker, "click", function () {
               if(openedWindow){
@@ -217,14 +238,14 @@
                 infowindow.setContent((_.options.initLocationInfoWindow ? _.options.initLocationInfoWindow : _.options.initLocation ));
               }
               
-              infowindow.open(map, this);
+              infowindow.open(_.mapObject, this);
               openedWindow = infowindow;
             });
 
             if (markers.length == 1) {
-              google.maps.event.addListener(map, 'zoom_changed', function() {
+              google.maps.event.addListener(_.mapObject, 'zoom_changed', function() {
                 let zoomChangeBoundsListener = 
-                    google.maps.event.addListener(map, 'bounds_changed', function(event) {
+                    google.maps.event.addListener(_.mapObject, 'bounds_changed', function(event) {
                         if (this.getZoom() > _.options.initZoom && this.initialZoom == true) {
                             this.setZoom(_.options.initZoom);
                             this.initialZoom = false;
@@ -236,17 +257,29 @@
 
           }
 
-          if (_.options.mainLocationMarkup) {
+          if (_.options.mainLocationMarker) {
             let marker = new google.maps.Marker({
                 position: originLocation,
                 title: 'Main Location',
                 draggable: _.options.mainLocationDraggable,
-                map: map,
-                icon: _.options.mainLocationMarkup
+                map: _.mapObject,
+                icon: _.options.mainLocationMarker
             });
-            map.setCenter(marker.getPosition())
 
-            google.maps.event.addListener(marker, "dragend", function(event) { 
+            _.mapObject.setCenter(marker.getPosition());
+
+            google.maps.event.addListener(marker, "click", function () {
+              if(openedWindow){
+                openedWindow.close();
+              }
+              
+              infowindow.setContent((_.options.mainLocationInfoWindow ? _.options.mainLocationInfoWindow : _.options.initLocation ));
+              
+              infowindow.open(_.mapObject, this);
+              openedWindow = infowindow;
+            });
+
+            google.maps.event.addListener(marker, "dragend", function(event) {
               _.options.inputLocation = {
                 lat: event.latLng.lat(),
                 lng: event.latLng.lng()
@@ -254,15 +287,16 @@
               
               _._searchLocations()
               
-            }); 
+            });
+
+            _.markersArr.push(marker);
           }
-          
 
           if (markers.length > 1) {
-            map.fitBounds(bounds);
+            _.mapObject.fitBounds(bounds);
           }else{
-            map.initialZoom = true;
-            map.fitBounds(bounds);
+            _.mapObject.initialZoom = true;
+            _.mapObject.fitBounds(bounds);
           }
           
       },

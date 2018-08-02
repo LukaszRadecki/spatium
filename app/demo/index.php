@@ -17,7 +17,7 @@
 <body>
     
     <div class="container-fluid">
-        <div class="row-fluid">
+        <div class="row">
         
             <div class="col-xs-12 text-center">
                 <img src="img/spatium_logo.png" alt="Spatium.js Logo">
@@ -50,17 +50,24 @@
             
         </div>
 
-        <div class="row">
+        <div class="row">            
             
-            <div class="col-xs-12 locations-container">
-                
+            <div class="col-xs-12 results-header top-30">
+                <h2>Results <span class="count"></span>: </h2>
             </div>
+
+            <div class="results-container">
             
+            </div>
+
         </div>
+
+        <div class="row top-30"></div>
+        <div class="row top-30"></div>
     </div>
     
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=[YOUR-API-KEY]&callback=mapInit">
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=mapInit">
     </script>
     <script src="js/main.js"></script>
 </body>

@@ -1,7 +1,23 @@
 #map{
     height: 500px;
 }
-
 img{
     max-width: 100%;
+}
+.top-30{
+    margin-top: 30px;
+}
+.results-header h2{
+    color: #848484;
+}
+.results-container h2{
+    color: #FF3C77;
+}
+.results-container p{
+    color: #848484;
+    font-weight: 600;
+}
+.results-container i{
+    color: rgb(0, 153, 135);
+    font-weight: 600;
 }

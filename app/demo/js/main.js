@@ -146,11 +146,13 @@ function mapInit(){
     };
 
     $('#map').spatium({
+        initLocation: "London",
         locationsSet: "./js/locations.json",
         inputLocation: "",
-        locationsMarkup: "./img/marker.png",
-        mainLocationMarkup: "./img/marker-main.png",
-        mapOptions: mapSettings
+        locationsMarker: "./img/marker.png",
+        mainLocationMarker: "./img/marker-main.png",
+        mapOptions: mapSettings,
+        mainLocationInfoWindow: "<h2>Drag Me!<h2>"
     });
 
     $('#searchLocations').on('click', function(){
@@ -158,13 +160,27 @@ function mapInit(){
             inputLocation: $('#inputLocation').val(),
             radius: $('#radius').val()
         });
-    })
+    });
     
     $("#map").on('spatium.mapRenderDone', function(event, params){
+
+        createLocationsList();
         
-        //console.log($('#map').spatium('getMatchedLocations', 'DESC', 'distance'));
+    });
+
+    function createLocationsList(){
+
+        var locations = $('#map').spatium('getMatchedLocations', 'ASC', 'distance');
+        var locationsHTML = "";
+
+        $(".count").html('('+locations.length+')');
         
-    })
+        locations.forEach(element => {
+            locationsHTML+= '<div class="col-xs-6 col-sm-4"><h2>'+element.company+'</h2><p>'+element.address+'</p><i>'+element.distance+' km</i></div>';
+        });
+
+        $('.results-container').html(locationsHTML);
+    }
 
 
 }
