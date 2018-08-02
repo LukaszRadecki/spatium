@@ -71,9 +71,8 @@
       },
 
       destroy: function () {
-
+          this.element[0].innerHTML = "";
           $.Widget.prototype.destroy.call(this);
-
       },
 
       _mapCreate: function(){

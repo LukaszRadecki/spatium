@@ -69,7 +69,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     destroy: function destroy() {
-
+      this.element[0].innerHTML = "";
       $.Widget.prototype.destroy.call(this);
     },
 

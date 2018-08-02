@@ -165,7 +165,6 @@ function mapInit(){
     $("#map").on('spatium.mapRenderDone', function(event, params){
 
         createLocationsList();
-        
     });
 
     function createLocationsList(){
