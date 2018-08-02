@@ -31,7 +31,7 @@ Event | Params | Description
 ----- | ------ | -----------
 spatium.mapRenderDone | `event`, `markersObject` | After locations search callback, return `event` and object of found locations with `distance` extra parameter.
 
-###Example usage:
+#### Example usage:
 
 
 ## Methods
@@ -43,4 +43,4 @@ Method | Argument | Description
 `getMatchedLocations` | order: string, orderBy: string | Get matched locations method. Avaliable only after locations search, include basic sort options.
 
 
-###Example usage:
+#### Example usage:
