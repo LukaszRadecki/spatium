@@ -6,6 +6,14 @@ Spatium it's a simple jQuery plugin that is used to search for a location within
 
 ## Requirements
 
+To start working with Spatium right away, you have to include some libs to your project:
+
+```html
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+```
+
+
 ## Settings
 
 Option | Type | Default | Description
@@ -50,6 +58,7 @@ Method | Argument | Description
 `spatium` | options: object | Init method.
 `updateData` | options: object | Update options and search locations.
 `getMatchedLocations` | order: string, orderBy: string | Get matched locations method. Avaliable only after locations search, include basic sort options.
+`destroy` |  | Remove map and destroy Spatium in document scope.
 
 
 #### Example usage:
@@ -112,5 +121,13 @@ $('#map').spatium('updateData', {
 // Get matched locations object, and sort DESC by `distance` parameter:
 
 $('#map').spatium('getMatchedLocations', 'DESC', 'distance');
+
+```
+
+###### destroy
+
+```javascript
+
+$('#map').spatium('destroy');
 
 ```
