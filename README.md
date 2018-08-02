@@ -2,14 +2,16 @@
 
 ![Spatium](https://github.com/LukaszRadecki/spatium/blob/readme_and_docs/spatium_logo.jpg)
 
-Documentation in progress...
+Spatium it's a simple jQuery plugin that is used to search for a location within a radius distance.
 
-### Settings
+## Requirements
+
+## Settings
 
 Option | Type | Default | Description
 ------ | ---- | ------- | -----------
 initLocation | string / object | false | Location that will be selected, before you search.
-initZoom | integer | false | Init number of zoom, or `false`. (After searching zoom i automatically fit to found markers).
+initZoom | integer | false | Init number of zoom, or `false`. (After searching zoom is automatically fit to found markers).
 initLocationInfoWindow | string / boolean | false| Content of init location Info Window, or `false` if you don't want to display it.
 mapOptions | object | {} | Object of map settings - color scheme etc.
 inputLocation | string / object | false | Location around which to search.
@@ -21,3 +23,24 @@ infoWindowTemplate | object / boolean | false| Object of Info Window template or
 mainLocationMarker | string / boolean | false | Path to markers icon file (`*.jpg`/`*.png`), or `false` if you don't want to display it.
 mainMarkerDraggable | boolean | true | Draggable of main location marker - if you set `true`, you can searching locations by drag & drop main marker.
 mainLocationInfoWindow | string | start | Content of main location Info Window, or `false` if you don't want to display it.
+
+
+## Events
+
+Event | Params | Description
+----- | ------ | -----------
+spatium.mapRenderDone | `event`, `markersObject` | After locations search callback, return `event` and object of found locations with `distance` extra parameter.
+
+###Example usage:
+
+
+## Methods
+
+Method | Argument | Description
+------ | -------- | -----------
+`spatium` | options: object | Init method.
+`updateData` | options: object | Update options and search locations.
+`getMatchedLocations` | order: string, orderBy: string | Get matched locations method. Avaliable only after locations search, include basic sort options.
+
+
+###Example usage:
