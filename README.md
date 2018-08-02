@@ -33,6 +33,15 @@ spatium.mapRenderDone | `event`, `markersObject` | After locations search callba
 
 #### Example usage:
 
+```javascript
+
+$("#map").on('spatium.mapRenderDone', function(event, locationsObj){
+        
+    console.dir(locationsObj);
+        
+});
+
+```
 
 ## Methods
 
@@ -44,3 +53,64 @@ Method | Argument | Description
 
 
 #### Example usage:
+
+###### spatium
+
+```javascript
+
+$('#map').spatium({
+    inputLocation: "London",
+    locationsSet: "./js/locations.json",
+    radius: 100,
+    distanceUnit: "mi",
+    locationsMarkup: "./img/marker.png",
+    mainLocationMarkup: "./img/marker-main.png",
+    infoWindowTemplate: [
+          {
+            tag: "h2",
+            content: "company", // my dataset contain `company` param
+            class: "your-class"
+          },
+          {
+            tag: "p",
+            content: "Some plain text",
+          },
+          {
+            tag: "a",
+            url: "email", // my dataset contain `email` param
+            target: "_blank",
+            content: "name", // my dataset contain `name` param
+            class: ""
+          },
+          {
+            tag: "p",
+            content: "distance",
+            class: "your-class"
+          },
+        ]
+});
+
+```
+
+###### updateData
+
+```javascript
+
+// Get values from form fields:
+
+$('#map').spatium('updateData', {
+    inputLocation: $('#inputLocation').val(),
+    radius: $('#radius').val()
+});
+
+```
+
+###### getMatchedLocations
+
+```javascript
+
+// Get matched locations object, and sort DESC by `distance` parameter:
+
+$('#map').spatium('getMatchedLocations', 'DESC', 'distance');
+
+```
