@@ -4,6 +4,10 @@
 
 Spatium it's a simple jQuery plugin that is used to search for a location within a radius distance.
 
+### Demo:
+
+![https://codepen.io/lukaszRadecki/full/bjMmXP/](https://codepen.io/lukaszRadecki/full/bjMmXP/)
+
 ## Requirements
 
 To start working with Spatium right away, you have to include some libs to your project:
