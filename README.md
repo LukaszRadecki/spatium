@@ -1,6 +1,6 @@
 # Spatium
 
-![Spatium](https://github.com/LukaszRadecki/spatium/blob/readme_and_docs/spatium_logo.jpg)
+![Spatium](https://raw.githubusercontent.com/LukaszRadecki/spatium/master/app/demo/img/spatium_logo.png)
 
 Spatium it's a simple jQuery plugin that is used to search for a location within a radius distance.
 
