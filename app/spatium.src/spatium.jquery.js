@@ -56,6 +56,8 @@
 
       markersArr: [],
 
+      // Private methods:
+
       _create: function () {
 
         this._mapCreate();
@@ -67,11 +69,6 @@
         }else{
           console.error("Spatium: Set 'initLocation' or 'inputLocation' and 'locationsSet' parameters.");
         }
-      },
-
-      destroy: function () {
-          this.element[0].innerHTML = "";
-          $.Widget.prototype.destroy.call(this);
       },
 
       _mapCreate: function(){
@@ -299,6 +296,23 @@
           
       },
 
+      _compareEngine: function(param) {
+        return function(a, b) {
+          if (a[param] < b[param])
+            return -1;
+          if (a[param] > b[param])
+            return 1;
+          return 0;
+        }
+      },
+
+      // Shader methods:
+
+      destroy: function () {
+        this.element[0].innerHTML = "";
+        $.Widget.prototype.destroy.call(this);
+      },
+
       updateData: function(updateObj){
         this.options = $.extend({}, this.options, updateObj);
         this._searchLocations();
@@ -324,17 +338,8 @@
 
       openInfoWindow: function(){
         console.log("Feature in progress");
-      },
-
-      _compareEngine: function(param) {
-        return function(a, b) {
-          if (a[param] < b[param])
-            return -1;
-          if (a[param] > b[param])
-            return 1;
-          return 0;
-        }
       }
+      
 
   });
 

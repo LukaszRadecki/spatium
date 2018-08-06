@@ -54,6 +54,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     markersArr: [],
 
+    // Private methods:
+
     _create: function _create() {
 
       this._mapCreate();
@@ -65,11 +67,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       } else {
         console.error("Spatium: Set 'initLocation' or 'inputLocation' and 'locationsSet' parameters.");
       }
-    },
-
-    destroy: function destroy() {
-      this.element[0].innerHTML = "";
-      $.Widget.prototype.destroy.call(this);
     },
 
     _mapCreate: function _mapCreate() {
@@ -286,6 +283,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     },
 
+    _compareEngine: function _compareEngine(param) {
+      return function (a, b) {
+        if (a[param] < b[param]) return -1;
+        if (a[param] > b[param]) return 1;
+        return 0;
+      };
+    },
+
+    // Shader methods:
+
+    destroy: function destroy() {
+      this.element[0].innerHTML = "";
+      $.Widget.prototype.destroy.call(this);
+    },
+
     updateData: function updateData(updateObj) {
       this.options = $.extend({}, this.options, updateObj);
       this._searchLocations();
@@ -309,14 +321,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     openInfoWindow: function openInfoWindow() {
       console.log("Feature in progress");
-    },
-
-    _compareEngine: function _compareEngine(param) {
-      return function (a, b) {
-        if (a[param] < b[param]) return -1;
-        if (a[param] > b[param]) return 1;
-        return 0;
-      };
     }
 
   });
